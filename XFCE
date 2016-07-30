@@ -1,0 +1,288 @@
+#!/bin/bash
+# g0tmi1k
+
+##### (Cosmetic) Colour output
+RED="\033[01;31m"      # Issues/Errors
+GREEN="\033[01;32m"    # Success
+YELLOW="\033[01;33m"   # Warnings/Information
+BLUE="\033[01;34m"     # Heading
+BOLD="\033[01;01m"     # Highlight
+RESET="\033[00m"       # Normal
+
+echo -e "\n ${GREEN}[+]${RESET} Installing ${GREEN}XFCE4${RESET}${RESET} ~ desktop environment"
+export DISPLAY=:0.0   #[[ -z $SSH_CONNECTION ]] || export DISPLAY=:0.0
+apt-get -y -qq install curl || echo -e ' '${RED}'[!] Issue with apt-get'${RESET} 1>&2
+apt-get -y -qq install xfce4 xfce4-places-plugin || echo -e ' '${RED}'[!] Issue with apt-get'${RESET}    #xfce4-goodies   xfce4-battery-plugin  xfce4-mount-plugin
+#--- Configuring XFCE
+mv -f /usr/bin/startx{,-gnome}
+ln -sf /usr/bin/startx{fce4,}
+mkdir -p /root/.config/xfce4/{desktop,menu,panel,xfconf,xfwm4}/
+mkdir -p /root/.config/xfce4/panel/launcher-{2,6,9}/
+mkdir -p /root/.config/xfce4/xfconf/xfce-perchannel-xml/
+cat <<EOF > /root/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-keyboard-shortcuts.xml
+<?xml version="1.0" encoding="UTF-8"?>
+
+<channel name="xfce4-keyboard-shortcuts" version="1.0">
+  <property name="commands" type="empty">
+    <property name="custom" type="empty">
+      <property name="XF86Display" type="string" value="xfce4-display-settings --minimal"/>
+      <property name="&lt;Alt&gt;F2" type="string" value="xfrun4"/>
+      <property name="&lt;Primary&gt;&lt;Alt&gt;t" type="string" value="/usr/bin/exo-open --launch TerminalEmulator"/>
+      <property name="&lt;Primary&gt;&lt;Alt&gt;Delete" type="string" value="xflock4"/>
+      <property name="&lt;Primary&gt;Escape" type="string" value="xfdesktop --menu"/>
+      <property name="&lt;Super&gt;p" type="string" value="xfce4-display-settings --minimal"/>
+      <property name="override" type="bool" value="true"/>
+      <property name="&lt;Primary&gt;space" type="string" value="xfce4-appfinder"/>
+    </property>
+  </property>
+  <property name="xfwm4" type="empty">
+    <property name="custom" type="empty">
+      <property name="&lt;Alt&gt;&lt;Control&gt;End" type="string" value="move_window_next_workspace_key"/>
+      <property name="&lt;Alt&gt;&lt;Control&gt;Home" type="string" value="move_window_prev_workspace_key"/>
+      <property name="&lt;Alt&gt;&lt;Control&gt;KP_1" type="string" value="move_window_workspace_1_key"/>
+      <property name="&lt;Alt&gt;&lt;Control&gt;KP_2" type="string" value="move_window_workspace_2_key"/>
+      <property name="&lt;Alt&gt;&lt;Control&gt;KP_3" type="string" value="move_window_workspace_3_key"/>
+      <property name="&lt;Alt&gt;&lt;Control&gt;KP_4" type="string" value="move_window_workspace_4_key"/>
+      <property name="&lt;Alt&gt;&lt;Control&gt;KP_5" type="string" value="move_window_workspace_5_key"/>
+      <property name="&lt;Alt&gt;&lt;Control&gt;KP_6" type="string" value="move_window_workspace_6_key"/>
+      <property name="&lt;Alt&gt;&lt;Control&gt;KP_7" type="string" value="move_window_workspace_7_key"/>
+      <property name="&lt;Alt&gt;&lt;Control&gt;KP_8" type="string" value="move_window_workspace_8_key"/>
+      <property name="&lt;Alt&gt;&lt;Control&gt;KP_9" type="string" value="move_window_workspace_9_key"/>
+      <property name="&lt;Alt&gt;&lt;Shift&gt;Tab" type="string" value="cycle_reverse_windows_key"/>
+      <property name="&lt;Alt&gt;Delete" type="string" value="del_workspace_key"/>
+      <property name="&lt;Alt&gt;F10" type="string" value="maximize_window_key"/>
+      <property name="&lt;Alt&gt;F11" type="string" value="fullscreen_key"/>
+      <property name="&lt;Alt&gt;F12" type="string" value="above_key"/>
+      <property name="&lt;Alt&gt;F4" type="string" value="close_window_key"/>
+      <property name="&lt;Alt&gt;F6" type="string" value="stick_window_key"/>
+      <property name="&lt;Alt&gt;F7" type="string" value="move_window_key"/>
+      <property name="&lt;Alt&gt;F8" type="string" value="resize_window_key"/>
+      <property name="&lt;Alt&gt;F9" type="string" value="hide_window_key"/>
+      <property name="&lt;Alt&gt;Insert" type="string" value="add_workspace_key"/>
+      <property name="&lt;Alt&gt;space" type="string" value="popup_menu_key"/>
+      <property name="&lt;Alt&gt;Tab" type="string" value="cycle_windows_key"/>
+      <property name="&lt;Control&gt;&lt;Alt&gt;d" type="string" value="show_desktop_key"/>
+      <property name="&lt;Control&gt;&lt;Alt&gt;Down" type="string" value="down_workspace_key"/>
+      <property name="&lt;Control&gt;&lt;Alt&gt;Left" type="string" value="left_workspace_key"/>
+      <property name="&lt;Control&gt;&lt;Alt&gt;Right" type="string" value="right_workspace_key"/>
+      <property name="&lt;Control&gt;&lt;Alt&gt;Up" type="string" value="up_workspace_key"/>
+      <property name="&lt;Control&gt;&lt;Shift&gt;&lt;Alt&gt;Left" type="string" value="move_window_left_key"/>
+      <property name="&lt;Control&gt;&lt;Shift&gt;&lt;Alt&gt;Right" type="string" value="move_window_right_key"/>
+      <property name="&lt;Control&gt;&lt;Shift&gt;&lt;Alt&gt;Up" type="string" value="move_window_up_key"/>
+      <property name="&lt;Control&gt;F1" type="string" value="workspace_1_key"/>
+      <property name="&lt;Control&gt;F10" type="string" value="workspace_10_key"/>
+      <property name="&lt;Control&gt;F11" type="string" value="workspace_11_key"/>
+      <property name="&lt;Control&gt;F12" type="string" value="workspace_12_key"/>
+      <property name="&lt;Control&gt;F2" type="string" value="workspace_2_key"/>
+      <property name="&lt;Control&gt;F3" type="string" value="workspace_3_key"/>
+      <property name="&lt;Control&gt;F4" type="string" value="workspace_4_key"/>
+      <property name="&lt;Control&gt;F5" type="string" value="workspace_5_key"/>
+      <property name="&lt;Control&gt;F6" type="string" value="workspace_6_key"/>
+      <property name="&lt;Control&gt;F7" type="string" value="workspace_7_key"/>
+      <property name="&lt;Control&gt;F8" type="string" value="workspace_8_key"/>
+      <property name="&lt;Control&gt;F9" type="string" value="workspace_9_key"/>
+      <property name="&lt;Shift&gt;&lt;Alt&gt;Page_Down" type="string" value="lower_window_key"/>
+      <property name="&lt;Shift&gt;&lt;Alt&gt;Page_Up" type="string" value="raise_window_key"/>
+      <property name="&lt;Super&gt;Tab" type="string" value="switch_window_key"/>
+      <property name="Down" type="string" value="down_key"/>
+      <property name="Escape" type="string" value="cancel_key"/>
+      <property name="Left" type="string" value="left_key"/>
+      <property name="Right" type="string" value="right_key"/>
+      <property name="Up" type="string" value="up_key"/>
+      <property name="override" type="bool" value="true"/>
+    </property>
+  </property>
+  <property name="providers" type="array">
+    <value type="string" value="xfwm4"/>
+    <value type="string" value="commands"/>
+  </property>
+</channel>
+EOF
+cat <<EOF > /root/.config/xfce4/panel/launcher-2/13684522758.desktop
+[Desktop Entry]
+Name=Terminal Emulator
+Encoding=UTF-8
+Exec=exo-open --launch TerminalEmulator
+Icon=utilities-terminal
+StartupNotify=false
+Terminal=false
+Comment=Use the command line
+Type=Application
+Categories=Utility;X-XFCE;X-Xfce-Toplevel;
+X-XFCE-Source=file:///usr/share/applications/exo-terminal-emulator.desktop
+EOF
+cat <<EOF > /root/.config/xfce4/panel/launcher-6/13684522587.desktop
+[Desktop Entry]
+Name=Iceweasel
+Encoding=UTF-8
+Exec=iceweasel %u
+Icon=iceweasel
+StartupNotify=true
+Terminal=false
+Comment=Browse the World Wide Web
+GenericName=Web Browser
+X-GNOME-FullName=Iceweasel Web Browser
+X-MultipleArgs=false
+Type=Application
+Categories=Network;WebBrowser;
+MimeType=text/html;text/xml;application/xhtml+xml;application/xml;application/vnd.mozilla.xul+xml;application/rss+xml;application/rdf+xml;image/gif;image/jpeg;image/png;x-scheme-handler/http;x-scheme-handler/https;
+StartupWMClass=Iceweasel
+X-XFCE-Source=file:///usr/share/applications/iceweasel.desktop
+EOF
+cat <<EOF > /root/.config/xfce4/panel/launcher-9/136845425410.desktop
+[Desktop Entry]
+Name=Application Finder
+Exec=xfce4-appfinder
+Icon=xfce4-appfinder
+StartupNotify=true
+Terminal=false
+Type=Application
+Categories=X-XFCE;Utility;
+Comment=Find and launch applications installed on your system
+X-XFCE-Source=file:///usr/share/applications/xfce4-appfinder.desktop
+EOF
+xfconf-query -n -a -c xfce4-panel -p /panels -t int -s 0
+xfconf-query --create --channel xfce4-panel --property /panels/panel-0/plugin-ids \
+  -t int -s 1  -t int -s 2  -t int -s 4  -t int -s 6  -t int -s 8  -t int -s 9 \
+  -t int -s 10  -t int -s 11  -t int -s 13  -t int -s 15 -t int -s 16  -t int -s 17  -t int -s 19  -t int -s 20
+xfconf-query -n -c xfce4-panel -p /panels/panel-0/length -t int -s 100
+xfconf-query -n -c xfce4-panel -p /panels/panel-0/size -t int -s 30
+xfconf-query -n -c xfce4-panel -p /panels/panel-0/position -t string -s "p=6;x=0;y=0"
+xfconf-query -n -c xfce4-panel -p /panels/panel-0/position-locked -t bool -s true
+xfconf-query -n -c xfce4-panel -p /plugins/plugin-1 -t string -s applicationsmenu  # application menu
+xfconf-query -n -c xfce4-panel -p /plugins/plugin-2 -t string -s launcher          # terminal  ID: 13684522758
+xfconf-query -n -c xfce4-panel -p /plugins/plugin-4 -t string -s places            # places
+xfconf-query -n -c xfce4-panel -p /plugins/plugin-6 -t string -s launcher          # iceweasel ID: 13684522587
+xfconf-query -n -c xfce4-panel -p /plugins/plugin-9 -t string -s launcher          # search    ID: 136845425410
+xfconf-query -n -c xfce4-panel -p /plugins/plugin-10 -t string -s tasklist
+xfconf-query -n -c xfce4-panel -p /plugins/plugin-11 -t string -s separator
+xfconf-query -n -c xfce4-panel -p /plugins/plugin-13 -t string -s mixer            # audio
+xfconf-query -n -c xfce4-panel -p /plugins/plugin-15 -t string -s systray
+xfconf-query -n -c xfce4-panel -p /plugins/plugin-16 -t string -s actions
+xfconf-query -n -c xfce4-panel -p /plugins/plugin-17 -t string -s clock
+xfconf-query -n -c xfce4-panel -p /plugins/plugin-19 -t string -s pager
+xfconf-query -n -c xfce4-panel -p /plugins/plugin-20 -t string -s showdesktop
+# application menu
+xfconf-query -n -c xfce4-panel -p /plugins/plugin-1/show-tooltips -t bool -s true
+xfconf-query -n -c xfce4-panel -p /plugins/plugin-1/show-button-title -t bool -s false
+# terminal
+xfconf-query -n -c xfce4-panel -p /plugins/plugin-2/items -t string -s "13684522758.desktop" -a
+# places
+xfconf-query -n -c xfce4-panel -p /plugins/plugin-4/mount-open-volumes -t bool -s true
+# iceweasel
+xfconf-query -n -c xfce4-panel -p /plugins/plugin-6/items -t string -s "13684522587.desktop" -a
+# search
+xfconf-query -n -c xfce4-panel -p /plugins/plugin-9/items -t string -s "136845425410.desktop" -a
+# tasklist (& separator - required for padding)
+xfconf-query -n -c xfce4-panel -p /plugins/plugin-10/show-labels -t bool -s true
+xfconf-query -n -c xfce4-panel -p /plugins/plugin-10/show-handle -t bool -s false
+xfconf-query -n -c xfce4-panel -p /plugins/plugin-11/style -t int -s 0
+xfconf-query -n -c xfce4-panel -p /plugins/plugin-11/expand -t bool -s true
+# systray
+xfconf-query -n -c xfce4-panel -p /plugins/plugin-15/show-frame -t bool -s false
+# actions
+xfconf-query -n -c xfce4-panel -p /plugins/plugin-16/appearance -t int -s 1
+xfconf-query -n -c xfce4-panel -p /plugins/plugin-16/items -t string -s "+logout-dialog" -t string -s "-switch-user" -t string -s "-separator" -t string -s "-logout" -t string -s "+lock-screen" -t string -s "+hibernate" -t string -s "+suspend" -t string -s "+restart" -t string -s "+shutdown" -a
+# clock
+xfconf-query -n -c xfce4-panel -p /plugins/plugin-17/show-frame -t bool -s false
+xfconf-query -n -c xfce4-panel -p /plugins/plugin-17/mode -t int -s 2
+xfconf-query -n -c xfce4-panel -p /plugins/plugin-17/digital-format -t string -s "%R, %Y-%m-%d"
+# pager / workspace
+xfconf-query -n -c xfce4-panel -p /plugins/plugin-19/miniature-view -t bool -s true
+xfconf-query -n -c xfce4-panel -p /plugins/plugin-19/rows -t int -s 1
+xfconf-query -n -c xfwm4 -p /general/workspace_count -t int -s 3
+#--- Theme options
+xfconf-query -n -c xsettings -p /Net/ThemeName -s "Kali-X"
+xfconf-query -n -c xsettings -p /Net/IconThemeName -s "Vibrancy-Kali"
+xfconf-query -n -c xsettings -p /Gtk/MenuImages -t bool -s true
+xfconf-query -n -c xfce4-panel -p /plugins/plugin-1/button-icon -t string -s "kali-menu"
+#--- Window management
+xfconf-query -n -c xfwm4 -p /general/snap_to_border -t bool -s true
+xfconf-query -n -c xfwm4 -p /general/snap_to_windows -t bool -s true
+xfconf-query -n -c xfwm4 -p /general/wrap_windows -t bool -s false
+xfconf-query -n -c xfwm4 -p /general/wrap_workspaces -t bool -s false
+xfconf-query -n -c xfwm4 -p /general/click_to_focus -t bool -s false
+#--- TouchPad
+#xfconf-query -n -c pointers -p /SynPS2_Synaptics_TouchPad/Properties/Synaptics_Edge_Scrolling -t int -s 0 -t int -s 0 -t int -s 0
+#xfconf-query -n -c pointers -p /SynPS2_Synaptics_TouchPad/Properties/Synaptics_Tap_Action -t int -s 0 -t int -s 0 -t int -s 0 -t int -s 0 -t int -s 0 -t int -s 0 -t int -s 0
+#xfconf-query -n -c pointers -p /SynPS2_Synaptics_TouchPad/Properties/Synaptics_Two-Finger_Scrolling -t int -s 1 -t int -s 1
+xfconf-query -n -c xfwm4 -p /general/click_to_focus -t bool -s true
+#--- Hide icons
+xfconf-query -n -c xfce4-desktop -p /desktop-icons/file-icons/show-filesystem -t bool -s false
+xfconf-query -n -c xfce4-desktop -p /desktop-icons/file-icons/show-home -t bool -s false
+xfconf-query -n -c xfce4-desktop -p /desktop-icons/file-icons/show-trash -t bool -s false
+xfconf-query -n -c xfce4-desktop -p /desktop-icons/file-icons/show-removable -t bool -s false
+#--- Start and exit values
+xfconf-query -n -c xfce4-session -p /splash/Engine -t string -s ""
+xfconf-query -n -c xfce4-session -p /shutdown/LockScreen -t bool -s true
+xfconf-query -n -c xfce4-session -p /general/SaveOnExit -t bool -s false
+#--- Power options
+#xfconf-query -n -c xfce4-power-manager -p /xfce4-power-manager/lid-action-on-ac -t int -s 1
+#xfconf-query -n -c xfce4-power-manager -p /xfce4-power-manager/lid-action-on-battery -t int -s 1
+#--- App Finder
+xfconf-query -n -c xfce4-appfinder -p /last/pane-position -t int -s 248
+xfconf-query -n -c xfce4-appfinder -p /last/window-height -t int -s 742
+xfconf-query -n -c xfce4-appfinder -p /last/window-width -t int -s 648
+#--- Enable compositing
+xfconf-query -n -c xfwm4 -p /general/use_compositing -t bool -s true
+xfconf-query -n -c xfwm4 -p /general/frame_opacity -t int -s 85
+
+
+##### Configure XFCE4
+echo -e "\n ${GREEN}[+]${RESET} Configuring ${GREEN}XFCE4${RESET}${RESET} ~ desktop environment"
+#--- XFCE fixes for default applications
+mkdir -p /root/.local/share/applications/
+file=/root/.local/share/applications/mimeapps.list; [ -e "${file}" ] && cp -n $file{,.bkup}
+[ ! -e "${file}" ] && echo '[Added Associations]' > "${file}"
+([[ -e "${file}" && "$(tail -c 1 $file)" != "" ]]) && echo >> "${file}"
+for VALUE in file trash; do
+  sed -i 's#x-scheme-handler/'${VALUE}'=.*#x-scheme-handler/'${VALUE}'=exo-file-manager.desktop#' "${file}"
+  grep -q '^x-scheme-handler/'${VALUE}'=' "${file}" 2>/dev/null || echo 'x-scheme-handler/'${VALUE}'=exo-file-manager.desktop' >> "${file}"
+done
+for VALUE in http https; do
+  sed -i 's#^x-scheme-handler/'${VALUE}'=.*#x-scheme-handler/'${VALUE}'=exo-web-browser.desktop#' "${file}"
+  grep -q '^x-scheme-handler/'${VALUE}'=' "${file}" 2>/dev/null || echo 'x-scheme-handler/'${VALUE}'=exo-web-browser.desktop' >> "${file}"
+done
+[[ $(tail -n 1 "${file}") != "" ]] && echo >> "${file}"
+file=/root/.config/xfce4/helpers.rc; [ -e "${file}" ] && cp -n $file{,.bkup}    #exo-preferred-applications   #xdg-mime default
+sed -i 's#^FileManager=.*#FileManager=Thunar#' "${file}" 2>/dev/null
+grep -q '^FileManager=Thunar' "${file}" 2>/dev/null || echo 'FileManager=Thunar' >> "${file}"
+#--- Configure file browser - Thunar (need to re-login for effect)
+mkdir -p /root/.config/Thunar/
+file=/root/.config/Thunar/thunarrc; [ -e "${file}" ] && cp -n $file{,.bkup}
+([[ -e "${file}" && "$(tail -c 1 $file)" != "" ]]) && echo >> "${file}"
+sed -i 's/LastShowHidden=.*/LastShowHidden=TRUE/' "${file}" 2>/dev/null || echo -e "[Configuration]\nLastShowHidden=TRUE" > /root/.config/Thunar/thunarrc;
+#--- XFCE fixes for Iceweasel
+file=/root/.config/xfce4/helpers.rc; [ -e "${file}" ] && cp -n $file{,.bkup}    #exo-preferred-applications   #xdg-mime default
+sed -i 's#^WebBrowser=.*#WebBrowser=iceweasel#' "${file}"
+grep -q '^WebBrowser=iceweasel' "${file}" 2>/dev/null || echo 'WebBrowser=iceweasel' >> "${file}"
+#--- Fix GNOME keyring issue
+file=/etc/xdg/autostart/gnome-keyring-pkcs11.desktop;   #[ -e "${file}" ] && cp -n $file{,.bkup}
+grep -q "XFCE" "${file}" || sed -i 's/^OnlyShowIn=*/OnlyShowIn=XFCE;/' "${file}"
+#--- Disable tracker (issue is, enables it in GNOME)
+tracker-control -r
+mkdir -p ~/.config/autostart/
+rm -f ~/.config/autostart/tracker-*.desktop
+rm -f /etc/xdg/autostart/tracker-*.desktop
+#--- Add keyboard shortcut (CTRL+SPACE) to open Application Finder
+file=/root/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-keyboard-shortcuts.xml   #; [ -e "${file}" ] && cp -n $file{,.bkup}
+grep -q '<property name="&lt;Primary&gt;space" type="string" value="xfce4-appfinder"/>' "${file}" || sed -i 's#<property name="\&lt;Alt\&gt;F2" type="string" value="xfrun4"/>#<property name="\&lt;Alt\&gt;F2" type="string" value="xfrun4"/>\n      <property name="\&lt;Primary\&gt;space" type="string" value="xfce4-appfinder"/>#' "${file}"
+#--- Add keyboard shortcut (CTRL+ALT+t) to start a terminal window
+file=/root/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-keyboard-shortcuts.xml   #; [ -e "${file}" ] && cp -n $file{,.bkup}
+grep -q '<property name="&lt;Primary&gt;&lt;Alt&gt;t" type="string" value="/usr/bin/exo-open --launch TerminalEmulator"/>' "${file}" || sed -i 's#<property name="\&lt;Alt\&gt;F2" type="string" value="xfrun4"/>#<property name="\&lt;Alt\&gt;F2" type="string" value="xfrun4"/>\n      <property name="\&lt;Primary\&gt;\&lt;Alt\&gt;t" type="string" value="/usr/bin/exo-open --launch TerminalEmulator"/>#' "${file}"
+#--- Remove any old sessions
+rm -f /root/.cache/sessions/*
+#--- Reload XFCE
+#/usr/bin/xfdesktop --reload
+
+##### Cosmetics (themes & wallpapers)
+echo -e "\n ${GREEN}[+]${RESET} ${GREEN}Cosmetics${RESET}${RESET} ~ XFCE Theme"
+mkdir -p /root/.themes/
+export DISPLAY=:0.0   #[[ -z $SSH_CONNECTION ]] || export DISPLAY=:0.0
+#--- axiom / axiomd (May 18 2010) XFCE4 theme
+curl --progress -k -L -f "http://xfce-look.org/CONTENT/content-files/90145-axiom.tar.gz" > /tmp/axiom.tar.gz || echo -e ' '${RED}'[!]'${RESET}" Issue downloading axiom.tar.gz" 1>&2    #***!!! hardcoded path!
+tar -zxf /tmp/axiom.tar.gz -C /root/.themes/
+xfconf-query -n -c xsettings -p /Net/ThemeName -s "axiomd"
+xfconf-query -n -c xsettings -p /Net/IconThemeName -s "Vibrancy-Kali-Dark"
+#--- Remove old temp files
+rm -f /tmp/axiom.tar*
