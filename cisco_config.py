@@ -10,20 +10,20 @@ def get_command():
 	print "[*] Enter the commands you want to send to the network device. Type \'done\' when finished."
 
 	while True:
-		var = raw_input("Command: ")
+		var = raw_input("[*] Command: ")
 		commands.append(var)
 		if var == "done":
 			break
 
 	commands.remove("done")
-	print "Commands that will be sent to the network device: " + str(commands)
+	print "[*] Commands that will be sent to the network device: " + str(commands)
 	return commands
 
 def get_devices():
 	# this function takes input and creates a list of hosts to connect to.
 
 	print "[*] Enter a comma-separated list of IP addresses"
-	device_list = raw_input("Hosts: ")
+	device_list = raw_input("[*] Hosts: ")
 
 	devices = device_list.split(',')
 	device_count = len(devices)
@@ -36,7 +36,7 @@ def get_username():
 	# asks for the username to be used to connect to the network device
 
 	print "[*] Enter the username for the device(s)"
-	username = raw_input("Username: ")
+	username = raw_input("[*] Username: ")
 	return username
 
 def get_device_type():
@@ -58,11 +58,11 @@ def get_device_type():
 	print "\t\'f5_ltm\',"
 	print "\t\'juniper\',"
 	print "\t\'brocade_vdx\'."
-	device_type = raw_input("Type: ")
+	device_type = raw_input("[*] Type: ")
 	return device_type
 
 def device_connect(dev_type, device_list, command_list, username, password):
-	# takes five arguments supplied by previous connections, and
+	# takes five arguments supplied by previous functions, and
 	# iterates through the list of devices, makes an SSH connection,
 	# and runs the provided commands
 
@@ -75,8 +75,8 @@ def device_connect(dev_type, device_list, command_list, username, password):
 
 device_list = get_devices()		# list of network devices
 command_list = get_command()	# list of commands to be run
-username = get_username()				# username to be used
-password = getpass.getpass()	# password to be used
+username = get_username()		# username to be used
+password = getpass.getpass("[*] Password: ")	# password to be used
 dev_type = get_device_type()	# the type of device 
 
 device_connect(dev_type, device_list, command_list, username, password)
