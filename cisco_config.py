@@ -11,11 +11,11 @@ def get_command():
 
 	while True:
 		var = raw_input("[*] Command: ")
-		commands.append(var)
 		if var == "done":
 			break
+		else:
+			commands.append(var)
 
-	commands.remove("done")
 	print "[*] Commands that will be sent to the network device: " + str(commands)
 	return commands
 
@@ -61,6 +61,17 @@ def get_device_type():
 	device_type = raw_input("[*] Type: ")
 	return device_type
 
+def get_enable_password():
+	# gets the enable password if needed
+
+	answer = raw_input("[*] Does the device require an enable password? Y or N: ")
+	answer = answer.lower()
+	if answer == "y":
+		enable_password = getpass.getpass("[*] Enable password: ")
+
+	return enable_password
+	
+
 def device_connect(dev_type, device_list, command_list, username, password):
 	# takes five arguments supplied by previous functions, and
 	# iterates through the list of devices, makes an SSH connection,
@@ -69,6 +80,7 @@ def device_connect(dev_type, device_list, command_list, username, password):
 	for router in device_list:
 		connection = netmiko.ConnectHandler(device_type = dev_type, ip = router, username = username, password = password)
 
+		connection.enable(enable_password)
 		connection.send_config_set(command_list)
 		print router + " is complete"
 		time.sleep(2)
@@ -78,5 +90,6 @@ command_list = get_command()	# list of commands to be run
 username = get_username()		# username to be used
 password = getpass.getpass("[*] Password: ")	# password to be used
 dev_type = get_device_type()	# the type of device 
+enable_password = get_enable_password()	# the enable password
 
 device_connect(dev_type, device_list, command_list, username, password)
